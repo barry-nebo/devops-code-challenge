@@ -9,7 +9,7 @@ Fork this repo as a base. You may change any code in this repository to suit the
 #   Requirement for the project
 +   AWS Services:- IAM, ECR, ECS, EC2 instances for the jenkins
 +   Docker
-+   Jenkins
++   Github action
 +   Terraform
 +   Nodejs dependencies (node version 16)
 
@@ -51,10 +51,22 @@ The frontend can be accessed at `localhost:3000`. If the frontend successfully c
 +   **NB**: We have both container running simultaneosly for the frontend and the backend to connect to each other. We can also notice we have thesame 'id value' from both screenshot above which shows they both connect.
     
 #   Task 2: Creating an automated Github action to deploy both frontend and backend application to Elastic Container Registry (ECR)
-##  Step 1: I utilized the GitHub action for the CI/CD for seamless integration and to demonstrate the workflow in a more visual format. Also, since am hosting my codebase on GitHub, it makes it easier to set up and work on.
++   I utilized the GitHub action for the CI/CD for seamless integration and to demonstrate the workflow in a more visual format. Also, since am hosting my codebase on GitHub, it makes it easier to set up and work on.
+
 ##  A- GitHub Action pipeline
-Pipeline for building, starting, dockerizing and pushing to Elastic Container Registry (ECR) - For this, i made sure the application builds and starts properly before dockerizing and pushing to ECR. The buildng of the app to docker image solely depend on application running and starting properly
-##  B- 
++   Pipeline for building, starting, dockerizing and pushing to Elastic Container Registry (ECR) - For this, i made sure the application builds and starts properly before dockerizing and pushing to ECR. The buildng of the app to docker image solely depend on application running and starting properly
+
+![github-action](./images/github-action-ci.png)
+##  B - Versioning Strategy
++   Using the versioning strateegy, i have made the docker image to have two tags (latest and a random value), in any occurence where we need to roll back to previous image, we can use the random value tag because the latest tag will be replaced each time we push to ECR.
+
+##  C - Git Hooks
++   This is been implemented anytime there is a push to the repo, it then trigger the pipeline to start running.
+
+        on:
+        push:
+            branches:
+            - main
 
 # Submission
 1. A github repo that has been forked from this repo with all your code.
