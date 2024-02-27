@@ -57,6 +57,10 @@ The frontend can be accessed at `localhost:3000`. If the frontend successfully c
 +   Pipeline for building, starting, dockerizing and pushing to Elastic Container Registry (ECR) - For this, i made sure the application builds and starts properly before dockerizing and pushing to ECR. The buildng of the app to docker image solely depend on application running and starting properly
 
 ![github-action](./images/github-action-ci.png)
+
++   Updated image on Elastic Container Registry (ECR)
+
+![ecr](./images/ecr.png)
 ##  B - Versioning Strategy
 +   Using the versioning strateegy, i have made the docker image to have two tags (latest and a random value), in any occurence where we need to roll back to previous image, we can use the random value tag because the latest tag will be replaced each time we push to ECR.
 
@@ -67,6 +71,30 @@ The frontend can be accessed at `localhost:3000`. If the frontend successfully c
         push:
             branches:
             - main
+
+
+#   Task 3: Terraform Setup
+This repository contains Terraform scripts to provision AWS resources. The scripts are organized to achieve the following tasks:
+
+##  A- Terraform Setup
+##  1.  Create VPC, Subnets, and ECS cluster, ECS service and deployed the application to ECS Service
+
+### Prerequisites
++   [Terraform](https://developer.hashicorp.com/terraform/install) installed on your machine.
++   AWS credentials configured with appropriate permissions.
+
+### Steps
+1.  Clone this repository:
+
+        git clone <current-github-url>
+        cd terraform
+
+2.  Initialize Terraform:
+
+         terraform init
+3.  Plan Terraform:
+
+         terraform plan
 
 # Submission
 1. A github repo that has been forked from this repo with all your code.
