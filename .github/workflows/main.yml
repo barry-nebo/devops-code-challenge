@@ -24,14 +24,14 @@ jobs:
         run: |
           cd backend
           npm ci
-          npm start
+          npm start &
 
       # Build Frontend
       - name: Build Frontend
         run: |
           cd ../frontend
           npm ci
-          npm start
+          npm start &
 
   docker_build_then_push_to_ecr:
     needs: build
