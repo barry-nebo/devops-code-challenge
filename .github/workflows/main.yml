@@ -25,6 +25,7 @@ jobs:
           cd backend
           npm ci
           npm start &
+          pwd
 
       # Build Frontend
       - name: Build Frontend
