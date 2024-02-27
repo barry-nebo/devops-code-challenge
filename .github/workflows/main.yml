@@ -25,14 +25,6 @@ jobs:
           cd backend
           npm ci
           npm start &
-          pwd
-
-      # Build Frontend
-      - name: Build Frontend
-        run: |
-          cd ../frontend
-          npm ci
-          npm start &
 
   docker_build_then_push_to_ecr:
     needs: build
@@ -65,3 +57,4 @@ jobs:
       # Push Docker image to ECR
       - name: Push Docker image to ECR
         run: docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/prembly:${GITHUB_SHA::8} && docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/prembly:latest
+
