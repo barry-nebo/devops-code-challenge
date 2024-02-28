@@ -76,7 +76,7 @@ jobs:
       - name: Build frontend
         run: |
           cd frontend
-          npm ci
+          npm i
           npm start &
 
   docker_build_then_push_frontend_to_ecr:
