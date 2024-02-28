@@ -36,11 +36,11 @@ variable "availability_zone2" {
   default     = "us-east-1b" # Change to your desired Availability Zone for subnet 2
 }
 
-# variable "ecs_cluster_name_subnet1" {
-#   description = "Name of the ECS Cluster in subnet 1."
-#   type        = string
-#   default     = "ecs-cluster-subnet1" # Change to your desired name for ECS Cluster in subnet 1
-# }
+variable "ecs_cluster_name_subnet1" {
+  description = "Name of the ECS Cluster in subnet 1."
+  type        = string
+  default     = "ecs-cluster-subnet1" # Change to your desired name for ECS Cluster in subnet 1
+}
 
 # variable "ecs_cluster_name_subnet2" {
 #   description = "Name of the ECS Cluster in subnet 2."
