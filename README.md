@@ -95,40 +95,59 @@ This repository contains Terraform scripts to provision AWS resources. The scrip
 3.  Plan Terraform:
 
          terraform plan
+4.  Apply Terraform:
 
-# Submission
-1. A github repo that has been forked from this repo with all your code.
-2. Modify this README file with instructions for:
-* Any tools needed to deploy your infrastructure
-* All the steps needed to repeat your deployment process
-* URLs to the your deployed frontend.
+        terraform apply
 
-# Evaluation
-You will be evaluated on the ease to replicate your infrastructure. This is a combination of quality of the instructions, as well as any scripts to automate the overall setup process.
+5.  Destroy the resources
 
-# Setup your environment
-Install nodejs. Binaries and installers can be found on nodejs.org.
-https://nodejs.org/en/download/
+        terraform destroy
 
-For macOS or Linux, Nodejs can usually be found in your preferred package manager.
-https://nodejs.org/en/download/package-manager/
+##  Detail Explanation On How The Terraform Flow Execute
+1.  Firstly, the terraform created the VPC resources to deploy our application, it is best create a new VPC for production and not to use the default VPC. The below VPC contains 2 Subnets, internet gateway and route table
+![vpc](./images/vpc.png)
 
-Depending on the Linux distribution, the Node Package Manager `npm` may need to be installed separately.
+2.  After, we created the security group to attach our ecs services, this opens the port 3000 and 8080 [here](./terraform/seg.tf)
+![secuity_group](./images/security_group.png)
 
+3.  We then deployed ECS cluster task defination, task definition role and ecs service for the backend application [here](./terraform/backend_ecs_setup.tf)
+    +   backend task definition
+        ![backend_task_definition](./images/backend_ecs_task_definition.png)
 
+    +   backend service
+        ![backend-task](./images/backend_ecs_service.png)
 
-# Configuration
-The frontend has a configuration file at `frontend/src/config.js` that defines the URL to call the backend. This URL is used on `frontend/src/App.js#12`, where the front end will make the GET call during the initial load of the page.
+    +   The application by heading to the URL http://<public_ip_of_backend_service>:8080/, in my case http://54.91.117.137:8080/
+        ![ecs-backend-ui](./images/ecs_backend_ui.png)
+    
+4.  Before we can make our frontend to connect with the deployed backend application, we need to change url this path [here](./frontend/src/config.js) to include our newly deployed url, because we are not more in our local system we are now running the application on the cloud.
 
-The backend has a configuration file at `backend/config.js` that defines the host that the frontend will be calling from. This URL is used in the `Access-Control-Allow-Origin` CORS header, read in `backend/index.js#14`
+            Before runnning on cloud, this is our local machine
+        //  export const API_URL = 'http://localhost:8080/'
 
-# Optional Extras
-The core requirement for this challenge is to get the provided application up and running for consumption over the public internet. That being said, there are some opportunities in this code challenge to demonstrate your skill sets that are above and beyond the core requirement.
+            After the backend application is being deployed to the cloud, we need to change from **localhost** to **backend public ip in ecs service**
+            export const API_URL = 'http://54.91.117.137:8080/'
+            export default API_URL
+    +   If the configuration is not done as above then we get this error
+        ![error](./images/failed_frontend_ecs.png)
+5.   After the change, i push this to the github so the github action can do the contineous integrate and update the image with the latest application configuration.
 
-A few examples of extras for this coding challenge:
-1. Dockerizing the application
-2. Scripts to set up the infrastructure
-3. Providing a pipeline for the application deployment
-4. Running the application in a serverless environment
+6.   We can then deploy our terraform script for the frontend application, which does the same thing as the backend applicatiion
+    
++   Frontend task definition
+    ![frontend_task_def](./images/frontend-task-definition.png)
 
-This is not an exhaustive list of extra features that could be added to this code challenge. At the end of the day, this section is for you to demonstrate any skills you want to show that’s not captured in the core requirement.
+    +   Backend Service
+    ![front-serv](./images/fronyend_ecs_serv.png)
+    
+    +   The application by heading to the URL http://<public_ip_of_frontend_service>:3000/, in my case http://54.146.247.101:3000/
+    ![frontend-service](./images/frontend-ecs-ui.png)
+
+    +   NB: The public IP for the frontend application get to change subsequently when we push to github and updates the ecr images, it then tends to update the cluster with the new image, so it might change, solution to this is by attaching a static Ip with the service
+
+7.  Lastly, we can destroy the infrastructure on terraform using
+
+        terraform destroy
+##  Take away
+### Monitoring and Logging
++   In my setup, i utilized the aws cloudwatch logs for the logging and also cloud watch to monitor the resouces such as CPU utilization, memory utilization and other in our environment.
