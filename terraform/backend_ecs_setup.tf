@@ -73,7 +73,7 @@ resource "aws_ecs_task_definition" "backend_task_definition" {
 
   container_definitions = jsonencode([{
     name  = "backend-image"
-    image = "172316546414.dkr.ecr.us-east-1.amazonaws.com/backend:latest"
+    image = "250977187232.dkr.ecr.us-east-1.amazonaws.com/backend:latest"
     cpu   = 1024
 
     portMappings = [{
