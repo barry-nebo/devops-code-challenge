@@ -117,7 +117,7 @@ This repository contains Terraform scripts to provision AWS resources. The scrip
     +   backend service
         ![backend-task](./images/backend_ecs_service.png)
 
-    +   The application by heading to the URL http://<public_ip_of_backend_service>:8080/, in my case http://54.91.117.137:8080/
+    +   The application by heading to the URL http://<public_ip_of_backend_service>:8080/, in my case http://18.234.69.52:8080/
         ![ecs-backend-ui](./images/ecs_backend_ui.png)
     
 4.  Before we can make our frontend to connect with the deployed backend application, we need to change url this path [here](./frontend/src/config.js) to include our newly deployed url, because we are not more in our local system we are now running the application on the cloud.
@@ -126,8 +126,9 @@ This repository contains Terraform scripts to provision AWS resources. The scrip
         //  export const API_URL = 'http://localhost:8080/'
 
             After the backend application is being deployed to the cloud, we need to change from **localhost** to **backend public ip in ecs service**
-            export const API_URL = 'http://54.91.117.137:8080/'
+            export const API_URL = 'http://18.234.69.52:8080/'
             export default API_URL
+
     +   If the configuration is not done as above then we get this error
         ![error](./images/failed_frontend_ecs.png)
 5.   After the change, i push this to the github so the github action can do the contineous integrate and update the image with the latest application configuration.
@@ -140,7 +141,7 @@ This repository contains Terraform scripts to provision AWS resources. The scrip
     +   Backend Service
     ![front-serv](./images/fronyend_ecs_serv.png)
     
-    +   The application by heading to the URL http://<public_ip_of_frontend_service>:3000/, in my case http://54.146.247.101:3000/
+    +   The application by heading to the URL http://<public_ip_of_frontend_service>:3000/, in my case http://54.167.250.149:3000/
     ![frontend-service](./images/frontend-ecs-ui.png)
 
     +   NB: The public IP for the frontend application get to change subsequently when we push to github and updates the ecr images, it then tends to update the cluster with the new image, so it might change, solution to this is by attaching a static Ip with the service
